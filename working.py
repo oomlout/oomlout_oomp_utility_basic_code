@@ -106,6 +106,7 @@ def add_md5(**kwargs):
     details = kwargs.get("details", {})
     #add a md5 hash of the id as a keyed item to kwargs
     import hashlib
+    id = details.get("id", None)
     details["md5"] = hashlib.md5(id.encode()).hexdigest()
     #trim md5 to 6 and add it as md5_6
     details["md5_5"] = details["md5"][0:5]
