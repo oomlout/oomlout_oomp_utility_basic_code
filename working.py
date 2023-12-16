@@ -130,13 +130,13 @@ def add_name(**kwargs):
     #add name, the name is the id with proper capitalization and _ replaced with ' '
     id = details.get("id", None)
     details["name"] = id.replace("_", " ").title()
-    id_no_class = kwargs.get("id_no_class", None)
+    id_no_class = details.get("id_no_class", None)
     name_no_class = id_no_class.replace("_", " ").title()
     details["name_no_class"] = name_no_class
-    id_no_type = kwargs.get("id_no_type", None)
+    id_no_type = details.get("id_no_type", None)
     name_no_type = id_no_type.replace("_", " ").title()
     details["name_no_type"] = name_no_type
-    id_no_size = kwargs.get("id_no_size", None)
+    id_no_size = details.get("id_no_size", None)
     name_no_size = id_no_size.replace("_", " ").title()
     details["name_no_size"] = name_no_size
     return kwargs
