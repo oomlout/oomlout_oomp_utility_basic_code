@@ -128,7 +128,7 @@ def add_md5(**kwargs):
 def add_name(**kwargs):
     details = kwargs.get("details", {})
     #add name, the name is the id with proper capitalization and _ replaced with ' '
-    id = kwargs.get("id", None)
+    id = details.get("id", None)
     details["name"] = id.replace("_", " ").title()
     id_no_class = kwargs.get("id_no_class", None)
     name_no_class = id_no_class.replace("_", " ").title()
