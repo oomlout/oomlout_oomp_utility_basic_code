@@ -145,6 +145,7 @@ def add_name(**kwargs):
     details["name_no_size"] = name_no_size
     id_no_color = details.get("id_no_color", None)
     name_no_color = id_no_color.replace("_", " ").title()
+    details["name_no_color"] = name_no_color
     return kwargs
 
 
