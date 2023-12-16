@@ -73,7 +73,7 @@ def generate(**kwargs):
     details = kwargs.get("details", {})
     #save updated details to working,yaml
     with open(yaml_file, 'w') as outfile:
-        yaml.dump(details, outfile, default_flow_style=False, sort_keys=False)
+        yaml.dump(details, outfile, default_flow_style=False)
 
 
     if details != {}:        
