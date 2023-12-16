@@ -1,0 +1,8 @@
+id: oomlout_oomp_data_injector_basic_codes
+name: "OOMP Data Injector Basic Codes"
+description: "This is part of OOMP the Oopen Organization Method For Parts. For more details: https://github.com/oomlout/oomp_base  "
+readme_manual: |
+  ## What it does
+  This utility adds the basic codes such as the md5 hashes
+  ## Usage
+  * run working.py from within an oomp folder
