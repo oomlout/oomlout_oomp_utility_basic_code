@@ -87,15 +87,15 @@ def add_id(**kwargs):
     clas = details.get("classification", None)
     id_no_class = id.replace(f"{clas}_","")        
     details["id_no_class"] = id_no_class
-    typ = kwargs.get("type",None)
+    typ = details.get("type",None)
     id_no_type = id_no_class.replace(f"{typ}_","")        
     details["id_no_type"] = id_no_type
-    siz = kwargs.get("size",None)
+    siz = details.get("size",None)
     id_no_size = id_no_type.replace(f"{siz}_","")
     details["id_no_size"] = id_no_size
 
     details["oomp_key"] = f'oomp_{id}'
-    details["github_link"] = f"https://github.com/oomlout/oomlout_oomp_part_src/tree/main/parts/{id}/working" 
+    details["github_link"] = f"https://github.com/oomlout/oomlout_oomp_part_src/tree/main/parts/{id}" 
     
     #add the directory
     details["directory"] = f'parts/{id}'   
