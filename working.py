@@ -93,6 +93,9 @@ def add_id(**kwargs):
     siz = details.get("size",None)
     id_no_size = id_no_type.replace(f"{siz}_","")
     details["id_no_size"] = id_no_size
+    col = details.get("color",None)    
+    id_no_color = id_no_size.replace(f"{col}_","")
+    details["id_no_color"] = id_no_color
 
     details["oomp_key"] = f'oomp_{id}'
     details["github_link"] = f"https://github.com/oomlout/oomlout_oomp_part_src/tree/main/parts/{id}" 
@@ -140,6 +143,8 @@ def add_name(**kwargs):
     id_no_size = details.get("id_no_size", None)
     name_no_size = id_no_size.replace("_", " ").title()
     details["name_no_size"] = name_no_size
+    id_no_color = details.get("id_no_color", None)
+    name_no_color = id_no_color.replace("_", " ").title()
     return kwargs
 
 
