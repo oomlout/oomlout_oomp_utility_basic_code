@@ -36,6 +36,11 @@ def create_recursive(**kwargs):
         directory_absolute = os.path.join(folder, item)
         directory_absolute = directory_absolute.replace("\\","/")
         if os.path.isdir(directory_absolute):
+            #if base.yaml exists in the folder and working.yaml does not make a copy of base and call it working.yaml
+            if os.path.exists(os.path.join(directory_absolute, "base.yaml")) and not os.path.exists(os.path.join(directory_absolute, "working.yaml")):
+                #copy base.yaml to working.yaml
+                import shutil
+                shutil.copyfile(os.path.join(directory_absolute, "base.yaml"), os.path.join(directory_absolute, "working.yaml"))
             #if working.yaml exists in the folder
             if os.path.exists(os.path.join(directory_absolute, "working.yaml")):
                 kwargs["directory_absolute"] = directory_absolute
