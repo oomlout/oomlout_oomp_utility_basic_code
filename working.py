@@ -64,20 +64,20 @@ def generate(**kwargs):
             details = yaml.load(stream, Loader=yaml.FullLoader)
         except yaml.YAMLError as exc:   
             print(exc)
-    kwargs["details"] = details
     
-    kwargs = add_id(**kwargs)
-    kwargs = add_name(**kwargs)
-    kwargs = add_md5(**kwargs)
-
-    details = kwargs.get("details", {})
-    #save updated details to working,yaml
-    with open(yaml_file, 'w') as outfile:
-        yaml.dump(details, outfile, default_flow_style=False)
-
-
     if details != {}:        
-        print(f"    generating for {directory_absolute}")
+        print(f"    generating basic code for {directory_absolute}")
+        kwargs["details"] = details
+    
+        kwargs = add_id(**kwargs)
+        kwargs = add_name(**kwargs)
+        kwargs = add_md5(**kwargs)
+
+        details = kwargs.get("details", {})
+        #save updated details to working,yaml
+        with open(yaml_file, 'w') as outfile:
+            yaml.dump(details, outfile, default_flow_style=False)
+
     else:
         print(f"no yaml file found in {directory_absolute}")    
 
