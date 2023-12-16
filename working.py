@@ -83,14 +83,14 @@ def generate(**kwargs):
 
 def add_id(**kwargs):
     details = kwargs.get("details", {})
-    
-    clas = details.get("classification", "none")
+    id = details.get("id", None)
+    clas = details.get("classification", None)
     id_no_class = id.replace(f"{clas}_","")        
     details["id_no_class"] = id_no_class
-    typ = kwargs.get("type","none")
+    typ = kwargs.get("type",None)
     id_no_type = id_no_class.replace(f"{typ}_","")        
     details["id_no_type"] = id_no_type
-    siz = kwargs.get("size","none")
+    siz = kwargs.get("size",None)
     id_no_size = id_no_type.replace(f"{siz}_","")
     details["id_no_size"] = id_no_size
 
@@ -128,15 +128,15 @@ def add_md5(**kwargs):
 def add_name(**kwargs):
     details = kwargs.get("details", {})
     #add name, the name is the id with proper capitalization and _ replaced with ' '
-    id = kwargs.get("id", "none")
+    id = kwargs.get("id", None)
     details["name"] = id.replace("_", " ").title()
-    id_no_class = kwargs.get("id_no_class", "none")
+    id_no_class = kwargs.get("id_no_class", None)
     name_no_class = id_no_class.replace("_", " ").title()
     details["name_no_class"] = name_no_class
-    id_no_type = kwargs.get("id_no_type", "none")
+    id_no_type = kwargs.get("id_no_type", None)
     name_no_type = id_no_type.replace("_", " ").title()
     details["name_no_type"] = name_no_type
-    id_no_size = kwargs.get("id_no_size", "none")
+    id_no_size = kwargs.get("id_no_size", None)
     name_no_size = id_no_size.replace("_", " ").title()
     details["name_no_size"] = name_no_size
     return kwargs
