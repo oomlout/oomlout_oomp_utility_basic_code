@@ -70,6 +70,7 @@ def generate(**kwargs):
         kwargs["details"] = details
     
         kwargs = add_id(**kwargs)
+        kwargs = add_partial(**kwargs)
         kwargs = add_name(**kwargs)
         kwargs = add_md5(**kwargs)
         kwargs = add_oomp_moji(**kwargs)
@@ -163,6 +164,23 @@ def add_oomp_moji(**kwargs):
     details["oomp_word_emoji_list"] = oomp_word.get_oomp_word(md5_6, style="emoji_list")
 
     return kwargs
+
+def add_partial(**kwargs):
+    partials = ["classification", "type", "size", "color", "description_main", "description_extra", "manufacturer","part_number"]
+    details = kwargs.get("details", {})
+    for partial in partials:
+        partial_value = details.get(partial, "")
+        if partial_value != "":
+            length = min(6, len(partial_value))
+            for i in range(1, length+1):           
+                details[f"{partial}_length_{i}"] = partial_value[:i]
+
+    return kwargs
+        
+
+
+
+
 
 ###### helpers
 
