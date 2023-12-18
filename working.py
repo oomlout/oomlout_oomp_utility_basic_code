@@ -72,7 +72,7 @@ def generate(**kwargs):
         kwargs = add_id(**kwargs)
         kwargs = add_name(**kwargs)
         kwargs = add_md5(**kwargs)
-        kwargs = add_oomp_mojis(**kwargs)
+        kwargs = add_oomp_moji(**kwargs)
 
         details = kwargs.get("details", {})
         #save updated details to working,yaml
