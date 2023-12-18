@@ -193,9 +193,9 @@ if __name__ == '__main__':
     kwargs = {}
     folder = os.path.dirname(__file__)
     #folder = "C:/gh/oomlout_oomp_builder/parts"
-    folder = "C:/gh/oomlout_oomp_part_generation_version_1/parts"
+    #folder = "C:/gh/oomlout_oomp_part_generation_version_1/parts"
     #folder = "C:/gh/oomlout_oobb_version_4/things"
-    folder = "C:/gh/oomlout_oomp_current_version"
+    #folder = "C:/gh/oomlout_oomp_current_version"
     kwargs["folder"] = folder
     overwrite = False
     kwargs["overwrite"] = overwrite
