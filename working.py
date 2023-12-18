@@ -72,6 +72,7 @@ def generate(**kwargs):
         kwargs = add_id(**kwargs)
         kwargs = add_name(**kwargs)
         kwargs = add_md5(**kwargs)
+        kwargs = add_oomp_mojis(**kwargs)
 
         details = kwargs.get("details", {})
         #save updated details to working,yaml
@@ -148,7 +149,18 @@ def add_name(**kwargs):
     details["name_no_color"] = name_no_color
     return kwargs
 
+def add_oomp_moji(**kwargs):
+    details = kwargs.get("details", {})
+    md5_6 = details.get("md5_6", None)
+    # oomp_word
+    import oomp_word
+    oomp_word_value = oomp_word.get_oomp_word(md5_6, style="string")
+    details["oomp_word"] = oomp_word_value
+    details["oomp_word_list"] = oomp_word.get_oomp_word(md5_6, style="list")
+    details["oomp_word_emoji"] = oomp_word.get_oomp_word(md5_6, style="emoji")
+    details["oomp_word_emoji_list"] = oomp_word.get_oomp_word(md5_6, style="emoji_list")
 
+    return kwargs
 
 ###### helpers
 
