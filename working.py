@@ -152,7 +152,9 @@ def add_name(**kwargs):
 def add_oomp_moji(**kwargs):
     details = kwargs.get("details", {})
     md5_6 = details.get("md5_6", None)
-    # oomp_word
+    # impotoomp_word from this files directory even if that isn't the cwd
+    import sys
+    sys.path.append(os.path.dirname(__file__))
     import oomp_word
     oomp_word_value = oomp_word.get_oomp_word(md5_6, style="string")
     details["oomp_word"] = oomp_word_value
