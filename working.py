@@ -173,7 +173,7 @@ def add_partial(**kwargs):
         if partial_value != "":
             length = 6
             for i in range(1, length+1):           
-                ii = min(i, len(partial_value)
+                ii = min(i, len(partial_value))
                 details[f"{partial}_length_{i}"] = partial_value[:ii]
                 details[f"{partial}_upper_length_{i}"] = partial_value[:ii].upper()
 
