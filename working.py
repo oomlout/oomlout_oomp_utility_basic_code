@@ -135,20 +135,50 @@ def add_name(**kwargs):
     details = kwargs.get("details", {})
     #add name, the name is the id with proper capitalization and _ replaced with ' '
     id = details.get("id", None)
-    details["name"] = id.replace("_", " ").title()
+    details["name"] = format_name(id)
     id_no_class = details.get("id_no_class", None)
-    name_no_class = id_no_class.replace("_", " ").title()
+    name_no_class = format_name(id_no_class)
     details["name_no_class"] = name_no_class
     id_no_type = details.get("id_no_type", None)
-    name_no_type = id_no_type.replace("_", " ").title()
+    name_no_type = format_name(id_no_type)
     details["name_no_type"] = name_no_type
     id_no_size = details.get("id_no_size", None)
-    name_no_size = id_no_size.replace("_", " ").title()
+    name_no_size = format_name(id_no_size)
     details["name_no_size"] = name_no_size
     id_no_color = details.get("id_no_color", None)
-    name_no_color = id_no_color.replace("_", " ").title()
+    name_no_color = format_name(id_no_color)
     details["name_no_color"] = name_no_color
+    #component names
+    partials = ["classification", "type", "size", "color", "description_main", "description_extra", "manufacturer","part_number"]
+    for partial in partials:
+        partial_value = details.get(partial, "")
+        partial_value = format_name(partial_value)
+        details[f"{partial}_name"] = partial_value
+        
     return kwargs
+
+def format_name(name):
+    return_value = name
+    return_value = return_value.replace("_", " ")
+    return_value = return_value.title()
+    replace_dict = []
+    replace_dict.append(["Mm","mm"])
+    replace_dict.append(["Mcu","MCU"])
+    replace_dict.append(["Rgb","RGB"])
+    replace_dict.append(["Ic","IC"])
+    replace_dict.append(["Lcd","LCD"])
+    replace_dict.append(["Led","LED"])
+    replace_dict.append(["Usb","USB"])
+    replace_dict.append(["Smd","SMD"])
+    replace_dict.append(["Smt","SMT"])
+    replace_dict.append(["Sip","SIP"])
+    replace_dict.append(["Pcb","PCB"])
+    for item in replace_dict:
+        return_value = return_value.replace(item[0], item[1])
+
+
+    return return_value
+
 
 def add_oomp_moji(**kwargs):
     details = kwargs.get("details", {})
