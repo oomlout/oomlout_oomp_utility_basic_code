@@ -33,6 +33,7 @@ def create_recursive(**kwargs):
     folder = kwargs.get("folder", os.path.dirname(__file__))
     kwargs["folder"] = folder
     filter = kwargs.get("filter", "")
+    count = 0
     for item in os.listdir(folder):
         if filter in item:
             directory_absolute = os.path.join(folder, item)
@@ -47,6 +48,10 @@ def create_recursive(**kwargs):
                 if os.path.exists(os.path.join(directory_absolute, "working.yaml")):
                     kwargs["directory_absolute"] = directory_absolute
                     create(**kwargs)
+                    count += 1
+                    #print for every 1000
+                    if count % 1000 == 0:
+                        print(f"    {count} folders processed")
 
 def create(**kwargs):
     directory_absolute = kwargs.get("directory_absolute", os.getcwd())    
@@ -68,7 +73,7 @@ def generate(**kwargs):
             print(exc)
     
     if details != {}:        
-        print(f"    generating basic code for {directory_absolute}")
+        #print(f"    generating basic code for {directory_absolute}")
         kwargs["details"] = details
     
         kwargs = add_id(**kwargs)
