@@ -49,8 +49,7 @@ def create_recursive(**kwargs):
                     kwargs["directory_absolute"] = directory_absolute
                     create(**kwargs)
                     count += 1
-                    #print for every 1000
-                    if count % 1000 == 0:
+                    if count % 100 == 0:
                         print(f"    {count} folders processed")
 
 def create(**kwargs):
