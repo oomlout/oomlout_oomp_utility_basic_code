@@ -33,6 +33,7 @@ def create_recursive(**kwargs):
     folder = kwargs.get("folder", os.path.dirname(__file__))
     kwargs["folder"] = folder
     filter = kwargs.get("filter", "")
+    kwargs["filter"] = filter
     count = 0
     
     import threading
@@ -61,6 +62,7 @@ def create_recursive(**kwargs):
 
 
 def create_recursive_thread(item, **kwargs):
+        filter = kwargs.get("filter", "")
         if filter in item:
             directory_absolute = os.path.join(folder, item)
             directory_absolute = directory_absolute.replace("\\","/")
