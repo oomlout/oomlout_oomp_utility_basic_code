@@ -21,6 +21,8 @@ with open(file_configuration, 'r') as stream:
         print(exc)
 
 
+cnt_basic = 1
+
 def main(**kwargs):
     folder = kwargs.get("folder", f"{os.path.dirname(__file__)}/parts")
     folder = folder.replace("\\","/")
@@ -34,7 +36,7 @@ def create_recursive(**kwargs):
     kwargs["folder"] = folder
     filter = kwargs.get("filter", "")
     kwargs["filter"] = filter
-    count = 0
+    
     
     import threading
     semaphore = threading.Semaphore(1000)
@@ -62,7 +64,9 @@ def create_recursive(**kwargs):
 
 
 def create_recursive_thread(item, **kwargs):
+        global cnt_basic
         filter = kwargs.get("filter", "")
+        folder = kwargs.get("folder")
         if filter in item:
             directory_absolute = os.path.join(folder, item)
             directory_absolute = directory_absolute.replace("\\","/")
@@ -76,9 +80,9 @@ def create_recursive_thread(item, **kwargs):
                 if os.path.exists(os.path.join(directory_absolute, "working.yaml")):
                     kwargs["directory_absolute"] = directory_absolute
                     create(**kwargs)
-                    count += 1
-                    if count % 100 == 0:
-                        print(f"    {count} folders processed")
+                    cnt_basic += 1
+                    if cnt_basic % 100 == 0:
+                        print(f".", end="")
 
 def create(**kwargs):
     directory_absolute = kwargs.get("directory_absolute", os.getcwd())    
