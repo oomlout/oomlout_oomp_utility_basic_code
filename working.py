@@ -34,7 +34,33 @@ def create_recursive(**kwargs):
     kwargs["folder"] = folder
     filter = kwargs.get("filter", "")
     count = 0
+    
+    import threading
+    semaphore = threading.Semaphore(1000)
+    threads = []
+
+    def create_thread(item, **kwargs):
+        with semaphore:
+            create_recursive_thread(item, **kwargs)
+    
     for item in os.listdir(folder):
+        thread = threading.Thread(target=create_thread, args=(item,), kwargs=kwargs)
+        threads.append(thread)
+        thread.start()
+    for thread in threads:
+        thread.join()
+        
+
+        
+
+
+        
+
+
+
+
+
+def create_recursive_thread(item, **kwargs):
         if filter in item:
             directory_absolute = os.path.join(folder, item)
             directory_absolute = directory_absolute.replace("\\","/")
