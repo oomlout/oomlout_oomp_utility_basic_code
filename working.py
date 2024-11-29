@@ -1,6 +1,7 @@
 import os
 import yaml
 import glob
+import copy
 
 folder_configuration = "configuration"
 folder_configuration = os.path.join(os.path.dirname(__file__), folder_configuration)
@@ -42,28 +43,21 @@ def create_recursive(**kwargs):
     semaphore = threading.Semaphore(1000)
     threads = []
 
-    def create_thread(item, **kwargs):
+    def create_thread(**kwargs):
         with semaphore:
-            create_recursive_thread(item, **kwargs)
+            create_recursive_thread(**kwargs)
     
     for item in os.listdir(folder):
-        thread = threading.Thread(target=create_thread, args=(item,), kwargs=kwargs)
+        kwargs["item"] = copy.deepcopy(item)
+        thread = threading.Thread(target=create_thread, kwargs=copy.deepcopy(kwargs))
         threads.append(thread)
         thread.start()
     for thread in threads:
         thread.join()
         
 
-        
-
-
-        
-
-
-
-
-
-def create_recursive_thread(item, **kwargs):
+def create_recursive_thread(**kwargs):
+        item = kwargs.get("item")
         global cnt_basic
         filter = kwargs.get("filter", "")
         folder = kwargs.get("folder")
