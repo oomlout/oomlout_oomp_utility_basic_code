@@ -109,8 +109,14 @@ def generate(**kwargs):
 
         details = kwargs.get("details", {})
         #save updated details to working,yaml
+        #with open(yaml_file, 'w') as outfile:
+        #    yaml.dump(details, outfile, default_flow_style=False)
+        # dump to yaml but uise a buffer to make it faster
+        import io
+        buffer = io.StringIO()
+        yaml.dump(details, buffer, default_flow_style=False)
         with open(yaml_file, 'w') as outfile:
-            yaml.dump(details, outfile, default_flow_style=False)
+            outfile.write(buffer.getvalue())
 
     else:
         print(f"no yaml file found in {directory_absolute}")    
