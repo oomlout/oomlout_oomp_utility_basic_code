@@ -2,29 +2,32 @@ import os
 import yaml
 import glob
 import copy
+import pickle
 
 folder_configuration = "configuration"
 folder_configuration = os.path.join(os.path.dirname(__file__), folder_configuration)
 file_configuration = os.path.join(folder_configuration, "configuration.yaml")
-#check if exists
-if not os.path.exists(file_configuration):
-    print(f"no configuration.yaml found in {folder_configuration} using default")
-    file_configuration = os.path.join(folder_configuration, "configuration_default.yaml")
-
-folder_navigation = "navigation"
-
-#import configuration
-configuration = {}
-with open(file_configuration, 'r') as stream:
-    try:
-        configuration = yaml.load(stream, Loader=yaml.FullLoader)
-    except yaml.YAMLError as exc:   
-        print(exc)
-
 
 cnt_basic = 1
 
 def main(**kwargs):
+    global file_configuration, folder_configuration, cnt_basic
+    #check if exists
+    if not os.path.exists(file_configuration):
+        print(f"no configuration.yaml found in {folder_configuration} using default")
+        file_configuration = os.path.join(folder_configuration, "configuration_default.yaml")
+
+    folder_navigation = "navigation"
+
+    #import configuration
+    configuration = {}
+    with open(file_configuration, 'r') as stream:
+        try:
+            configuration = yaml.load(stream, Loader=yaml.FullLoader)
+        except yaml.YAMLError as exc:   
+            print(exc)
+
+
     folder = kwargs.get("folder", f"{os.path.dirname(__file__)}/parts")
     folder = folder.replace("\\","/")
     
@@ -39,8 +42,10 @@ def create_recursive(**kwargs):
     kwargs["filter"] = filter
     
     
-    mode = "semaphore"
-    mode = "thread"
+    #mode = "semaphore"
+    #mode = "thread"
+    #mode =  "multiprocess"
+    mode =  "multiprocess_light"
     if mode == "semaphore":
         import threading
         semaphore = threading.Semaphore(1000)
@@ -67,6 +72,23 @@ def create_recursive(**kwargs):
             thread.start()
         for thread in threads:
             thread.join()
+    elif mode == "multiprocess":
+        import multiprocessing
+        processes = []
+        for item in os.listdir(folder):
+            kwargs["item"] = copy.deepcopy(item)
+            process = multiprocessing.Process(target=create_recursive_thread, kwargs=copy.deepcopy(kwargs))
+            processes.append(process)
+            process.start()
+        for process in processes:
+            process.join()
+    elif mode == "multiprocess_light":
+        import concurrent.futures
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            for item in os.listdir(folder):
+                #use pickle to copy item
+                kwargs["item"] = pickle.loads(pickle.dumps(item, -1))                
+                executor.submit(create_recursive_thread, pickle.loads(pickle.dumps(kwargs, -1)))
         
 
 def create_recursive_thread(**kwargs):
@@ -98,6 +120,7 @@ def create(**kwargs):
     
 
 def generate(**kwargs):    
+    save_result = kwargs.get("save_result", False)
     directory_absolute = kwargs.get("directory_absolute", os.getcwd())
     folder = kwargs.get("folder", os.getcwd())
     yaml_file = os.path.join(directory_absolute, "working.yaml")
@@ -125,11 +148,12 @@ def generate(**kwargs):
         #with open(yaml_file, 'w') as outfile:
         #    yaml.dump(details, outfile, default_flow_style=False)
         # dump to yaml but uise a buffer to make it faster
-        import io
-        buffer = io.StringIO()
-        yaml.dump(details, buffer, default_flow_style=False)
-        with open(yaml_file, 'w') as outfile:
-            outfile.write(buffer.getvalue())
+        if save_result:
+            import io
+            buffer = io.StringIO()
+            yaml.dump(details, buffer, default_flow_style=False)
+            with open(yaml_file, 'w') as outfile:
+                outfile.write(buffer.getvalue())
 
     else:
         print(f"no yaml file found in {directory_absolute}")    
