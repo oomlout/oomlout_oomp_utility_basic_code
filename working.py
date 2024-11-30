@@ -39,21 +39,34 @@ def create_recursive(**kwargs):
     kwargs["filter"] = filter
     
     
-    import threading
-    semaphore = threading.Semaphore(1000)
-    threads = []
+    mode = "semaphore"
+    mode = "thread"
+    if mode == "semaphore":
+        import threading
+        semaphore = threading.Semaphore(1000)
+        threads = []
 
-    def create_thread(**kwargs):
-        with semaphore:
-            create_recursive_thread(**kwargs)
-    
-    for item in os.listdir(folder):
-        kwargs["item"] = copy.deepcopy(item)
-        thread = threading.Thread(target=create_thread, kwargs=copy.deepcopy(kwargs))
-        threads.append(thread)
-        thread.start()
-    for thread in threads:
-        thread.join()
+        def create_thread(**kwargs):
+            with semaphore:
+                create_recursive_thread(**kwargs)
+        
+        for item in os.listdir(folder):
+            kwargs["item"] = copy.deepcopy(item)
+            thread = threading.Thread(target=create_thread, kwargs=copy.deepcopy(kwargs))
+            threads.append(thread)
+            thread.start()
+        for thread in threads:
+            thread.join()
+    elif mode == "thread":
+        import threading
+        threads = []
+        for item in os.listdir(folder):
+            kwargs["item"] = copy.deepcopy(item)
+            thread = threading.Thread(target=create_recursive_thread, kwargs=copy.deepcopy(kwargs))
+            threads.append(thread)
+            thread.start()
+        for thread in threads:
+            thread.join()
         
 
 def create_recursive_thread(**kwargs):
