@@ -42,10 +42,10 @@ def create_recursive(**kwargs):
     kwargs["filter"] = filter
     
     
-    #mode = "semaphore"
+    mode = "semaphore"
     #mode = "thread"
     #mode =  "multiprocess"
-    mode =  "multiprocess_light"
+    #mode =  "multiprocess_light"
     if mode == "semaphore":
         import threading
         semaphore = threading.Semaphore(1000)
@@ -57,7 +57,8 @@ def create_recursive(**kwargs):
         
         for item in os.listdir(folder):
             kwargs["item"] = copy.deepcopy(item)
-            thread = threading.Thread(target=create_thread, kwargs=copy.deepcopy(kwargs))
+            #thread = threading.Thread(target=create_thread, kwargs=copy.deepcopy(kwargs))
+            thread = threading.Thread(target=create_thread, kwargs=pickle.loads(pickle.dumps(kwargs, -1)))  
             threads.append(thread)
             thread.start()
         for thread in threads:
