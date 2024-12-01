@@ -56,7 +56,7 @@ def create_recursive(**kwargs):
                 create_recursive_thread(**kwargs)
         
         for item in os.listdir(folder):
-            kwargs["item"] = copy.deepcopy(item)
+            kwargs["item"] = item
             #thread = threading.Thread(target=create_thread, kwargs=copy.deepcopy(kwargs))
             thread = threading.Thread(target=create_thread, kwargs=pickle.loads(pickle.dumps(kwargs, -1)))  
             threads.append(thread)
@@ -121,7 +121,7 @@ def create(**kwargs):
     
 
 def generate(**kwargs):    
-    save_result = kwargs.get("save_result", False)
+    save_result = kwargs.get("save_result", True)
     directory_absolute = kwargs.get("directory_absolute", os.getcwd())
     folder = kwargs.get("folder", os.getcwd())
     yaml_file = os.path.join(directory_absolute, "working.yaml")
