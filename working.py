@@ -51,14 +51,17 @@ def create_recursive(**kwargs):
         semaphore = threading.Semaphore(1000)
         threads = []
 
-        def create_thread(**kwargs):
+        #def create_thread(**kwargs):
+        def create_thread(item, **kwargs):
             with semaphore:
-                create_recursive_thread(**kwargs)
+                #create_recursive_thread(**kwargs)
+                create_recursive_thread(item, **kwargs)
         
         for item in os.listdir(folder):
             kwargs["item"] = item
             #thread = threading.Thread(target=create_thread, kwargs=copy.deepcopy(kwargs))
-            thread = threading.Thread(target=create_thread, kwargs=pickle.loads(pickle.dumps(kwargs, -1)))  
+            #thread = threading.Thread(target=create_thread, kwargs=pickle.loads(pickle.dumps(kwargs, -1)))  
+            thread = threading.Thread(target=create_thread, kwargs={"item":item, **kwargs})
             threads.append(thread)
             thread.start()
         for thread in threads:
@@ -92,8 +95,9 @@ def create_recursive(**kwargs):
                 executor.submit(create_recursive_thread, pickle.loads(pickle.dumps(kwargs, -1)))
         
 
-def create_recursive_thread(**kwargs):
-        item = kwargs.get("item")
+#def create_recursive_thread(**kwargs):
+def create_recursive_thread(item, **kwargs):
+        #item = kwargs.get("item")
         global cnt_basic
         filter = kwargs.get("filter", "")
         folder = kwargs.get("folder")
@@ -108,21 +112,21 @@ def create_recursive_thread(**kwargs):
                     shutil.copyfile(os.path.join(directory_absolute, "base.yaml"), os.path.join(directory_absolute, "working.yaml"))
                 #if working.yaml exists in the folder
                 if os.path.exists(os.path.join(directory_absolute, "working.yaml")):
-                    kwargs["directory_absolute"] = directory_absolute
-                    create(**kwargs)
+                    #kwargs["directory_absolute"] = directory_absolute
+                    create(directory_absolute, **kwargs)
                     cnt_basic += 1
                     if cnt_basic % 100 == 0:
                         print(f".", end="")
 
-def create(**kwargs):
-    directory_absolute = kwargs.get("directory_absolute", os.getcwd())    
-    kwargs["directory_absolute"] = directory_absolute    
-    generate(**kwargs)
+def create(directory_absolute, **kwargs):
+    #directory_absolute = kwargs.get("directory_absolute", os.getcwd())    
+    #kwargs["directory_absolute"] = directory_absolute    
+    generate(directory_absolute,**kwargs)
     
 
-def generate(**kwargs):    
+def generate(directory_absolute, **kwargs):    
     save_result = kwargs.get("save_result", True)
-    directory_absolute = kwargs.get("directory_absolute", os.getcwd())
+    #directory_absolute = kwargs.get("directory_absolute", os.getcwd())
     folder = kwargs.get("folder", os.getcwd())
     yaml_file = os.path.join(directory_absolute, "working.yaml")
     kwargs["yaml_file"] = yaml_file
@@ -136,15 +140,16 @@ def generate(**kwargs):
     
     if details != {}:        
         #print(f"    generating basic code for {directory_absolute}")
-        kwargs["details"] = details
+        #kwargs["details"] = details
     
-        kwargs = add_id(**kwargs)
-        kwargs = add_partial(**kwargs)
-        kwargs = add_name(**kwargs)
-        kwargs = add_md5(**kwargs)
-        kwargs = add_oomp_moji(**kwargs)
+        if details != None:
+            kwargs = add_id(details,**kwargs)
+            kwargs = add_partial(details,**kwargs)
+            kwargs = add_name(details,**kwargs)
+            kwargs = add_md5(details,**kwargs)
+            kwargs = add_oomp_moji(details,**kwargs)
 
-        details = kwargs.get("details", {})
+        
         #save updated details to working,yaml
         #with open(yaml_file, 'w') as outfile:
         #    yaml.dump(details, outfile, default_flow_style=False)
@@ -159,8 +164,9 @@ def generate(**kwargs):
     else:
         print(f"no yaml file found in {directory_absolute}")    
 
-def add_id(**kwargs):
-    details = kwargs.get("details", {})
+def add_id(details,**kwargs):
+    
+    #details = kwargs.get("details", {})
     id = details.get("id", None)
     clas = details.get("classification", None)
     id_no_class = id.replace(f"{clas}_","")        
@@ -183,8 +189,8 @@ def add_id(**kwargs):
 
     return kwargs
 
-def add_md5(**kwargs):
-    details = kwargs.get("details", {})
+def add_md5(details,**kwargs):
+    #details = kwargs.get("details", {})
     #add a md5 hash of the id as a keyed item to kwargs
     import hashlib
     id = details.get("id", None)
@@ -207,8 +213,8 @@ def add_md5(**kwargs):
 
 
 
-def add_name(**kwargs):
-    details = kwargs.get("details", {})
+def add_name(details,**kwargs):
+    #details = kwargs.get("details", {})
     #add name, the name is the id with proper capitalization and _ replaced with ' '
     id = details.get("id", None)
     details["name"] = format_name(id)
@@ -258,8 +264,8 @@ def format_name(name):
     return return_value
 
 
-def add_oomp_moji(**kwargs):
-    details = kwargs.get("details", {})
+def add_oomp_moji(details,**kwargs):
+    #details = kwargs.get("details", {})
     md5_6 = details.get("md5_6", None)
     # impotoomp_word from this files directory even if that isn't the cwd
     import sys
@@ -273,9 +279,9 @@ def add_oomp_moji(**kwargs):
 
     return kwargs
 
-def add_partial(**kwargs):
+def add_partial(details,**kwargs):
     partials = ["classification", "type", "size", "color", "description_main", "description_extra", "manufacturer","part_number"]
-    details = kwargs.get("details", {})
+    #details = kwargs.get("details", {})
     for partial in partials:
         partial_value = details.get(partial, "")
         if partial_value != "":
@@ -334,6 +340,7 @@ if __name__ == '__main__':
     #folder = "C:/gh/oomlout_oomp_part_generation_version_1/parts"
     #folder = "C:/gh/oomlout_oobb_version_4/things"
     #folder = "C:/gh/oomlout_oomp_current_version"
+    folder = "Z:\\oomlout_oomp_current_version_fast_test\\parts"
     kwargs["folder"] = folder
     overwrite = False
     kwargs["overwrite"] = overwrite
