@@ -59,10 +59,14 @@ def create_recursive(**kwargs):
         
         for item in os.listdir(folder):
             if filter == "" or filter in item:
-                kwargs["item"] = item
+                #kwargs["item"] = item
                 #thread = threading.Thread(target=create_thread, kwargs=copy.deepcopy(kwargs))
                 #thread = threading.Thread(target=create_thread, kwargs=pickle.loads(pickle.dumps(kwargs, -1)))  
-                thread = threading.Thread(target=create_thread, kwargs={"item":item, **kwargs})
+                #thread = threading.Thread(target=create_thread, kwargs={"item":item, **kwargs})
+                #use partial
+                import functools
+                thread = threading.Thread(target=functools.partial(create_thread, item=item, **kwargs))
+                
                 threads.append(thread)
                 thread.start()
             for thread in threads:
@@ -71,7 +75,7 @@ def create_recursive(**kwargs):
         import threading
         threads = []
         for item in os.listdir(folder):
-            kwargs["item"] = copy.deepcopy(item)
+            #kwargs["item"] = copy.deepcopy(item)
             thread = threading.Thread(target=create_recursive_thread, kwargs=copy.deepcopy(kwargs))
             threads.append(thread)
             thread.start()
